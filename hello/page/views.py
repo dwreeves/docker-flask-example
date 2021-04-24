@@ -4,6 +4,8 @@ from flask import Blueprint
 from flask import __version__
 from flask import render_template
 
+from celery import current_app as current_celery_app
+
 from hello.extensions import db
 from hello.extensions import redis
 
@@ -25,4 +27,5 @@ def home():
 def up():
     redis.ping()
     db.engine.execute("SELECT 1")
+    current_celery_app.control.inspect().ping()
     return ""

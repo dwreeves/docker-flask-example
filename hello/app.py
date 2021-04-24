@@ -1,4 +1,5 @@
 from celery import Celery
+from celery.bin.celery import celery as celery_cmd
 from flask import Flask
 from werkzeug.debug import DebuggedApplication
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -28,7 +29,7 @@ def create_celery_app(app=None):
 
         def __call__(self, *args, **kwargs):
             with app.app_context():
-                return TaskBase.__call__(self, *args, **kwargs)
+                return super().__call__(*args, **kwargs)
 
     celery.Task = ContextTask
 
@@ -54,6 +55,8 @@ def create_app(settings_override=None):
     app.register_blueprint(page)
 
     extensions(app)
+
+    app.cli.add_command(celery_cmd)
 
     return app
 

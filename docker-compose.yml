@@ -65,7 +65,7 @@ services:
 
   worker:
     <<: *default-app
-    command: celery -A "hello.app.celery_app" worker -l "${CELERY_LOG_LEVEL:-info}"
+    command: flask celery worker -l "${CELERY_LOG_LEVEL:-info}"
     entrypoint: []
     deploy:
       resources:
